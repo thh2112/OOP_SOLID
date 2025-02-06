@@ -1,5 +1,4 @@
-import { DiscountType, IDiscount } from "../interfaces/discount.interface";
-import { DiscountFactory } from "./discount-factory.service";
+import { IDiscount } from "../interfaces/discount.interface";
 
 export class DiscountService {
   discount: IDiscount | null = null;

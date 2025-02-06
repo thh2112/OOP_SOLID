@@ -1,5 +1,5 @@
-import { DiscountFactory } from "../../discounts/services/discount-factory.service";
 import { DiscountType } from "../../discounts/interfaces/discount.interface";
+import { DiscountServiceFactory } from "../../discounts/services/discount-factory.service";
 import { IPayment, PaymentType } from "../interfaces/payment.interface";
 import { PaymentServiceFactory } from "./payment.factory.service";
 
@@ -23,15 +23,16 @@ export class PaymentService {
 
   calculatePayment(paymentType: PaymentType): IPayment {
     let discountType = null;
-    if (this.isBlackFriday) {
+    if (this.isBlackFriday()) {
       discountType = DiscountType.BLACK_FRIDAY_DISCOUNT;
     } else {
       discountType = DiscountType.NO_DISCOUNT;
     }
 
-    const amount = DiscountFactory.getDiscount(discountType).calculateDiscount(
-      this.paymentInfo.amount,
-    );
+    const discountServiceFactory = new DiscountServiceFactory();
+    const amount = discountServiceFactory
+      .getDiscount(discountType)
+      .calculateDiscount(this.paymentInfo.amount);
 
     this.paymentInfo.amount = amount;
 
@@ -43,6 +44,6 @@ export class PaymentService {
   }
 
   private isBlackFriday(): boolean {
-    return true;
+    return false;
   }
 }
